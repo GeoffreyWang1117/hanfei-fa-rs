@@ -1,0 +1,32 @@
+[package]
+name = "hanfei-fa"
+version = "0.2.0"
+edition = "2021"
+description = "法 — ML model weight integrity verification via hierarchical Merkle trees. O(1) root check, O(k log C) layer-aware diff."
+license = "Apache-2.0"
+repository = "https://github.com/GeoffreyWang1117/hanfei-fa-rs"
+homepage = "https://github.com/GeoffreyWang1117/hanfei-fa-rs"
+documentation = "https://docs.rs/hanfei-fa"
+keywords = ["merkle-tree", "integrity", "verification", "model-weights", "hashing"]
+categories = ["cryptography", "algorithms"]
+readme = "README.md"
+
+[dependencies]
+sha2 = "0.10"
+sha3 = "0.10"
+blake2 = "0.10"
+blake3 = "1.5"
+digest = "0.10"
+hex = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rayon = "1.10"
+
+[dev-dependencies]
+rand = "0.8"
+criterion = { version = "0.5", features = ["html_reports"] }
+tempfile = "3.10"
+
+[[bench]]
+name = "merkle_bench"
+harness = false
