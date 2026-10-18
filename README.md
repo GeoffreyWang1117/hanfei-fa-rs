@@ -28,6 +28,33 @@ Hierarchical Merkle tree verification for ML model weights in Rust.
 
 Also available as a Python package: `pip install hanfei-fa`
 
+
+## Manifest format v2
+
+`hanfei_fa::v2` implements the format v2 shared with the Python package
+([`merkle-weight-verify`](https://pypi.org/project/merkle-weight-verify/), spec in
+`docs/MANIFEST_V2.md` there): domain-separated RFC 6962 trees, tensor roots
+that bind name, dtype, shape and size, a model root over tensor roots, and
+tensor/chunk inclusion proofs. Manifests are interchangeable between the two
+implementations; `tests/v2_vectors.rs` checks every root against the shared
+vectors for SHA-256, SHA-512, SHA3-256, BLAKE2b and BLAKE3.
+
+```rust
+use hanfei_fa::v2::{ModelTree, TensorMeta};
+use hanfei_fa::HashAlgorithm;
+
+let mut model = ModelTree::new("my-model", HashAlgorithm::Sha256);
+model.insert("model.norm.weight",
+             Some(TensorMeta { dtype: "F32".into(), shape: vec![8] }), &[0u8; 32], 16384);
+let root = model.model_root_hex().unwrap();
+let proof = model.tensor_proof("model.norm.weight").unwrap();
+assert!(proof.verify(HashAlgorithm::Sha256));
+let manifest = model.to_manifest(true);          // serde_json::Value
+let loaded = ModelTree::from_manifest(&manifest).unwrap();   // re-derives and checks every root
+```
+
+The v1 types (`MerkleTree`, `ModelMerkleTree`, ...) are unchanged.
+
 ## Install
 
 ```toml

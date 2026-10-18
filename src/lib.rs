@@ -26,6 +26,12 @@
 //! println!("root: {}", tree.root_hash());
 //! ```
 //!
+//! ## Manifest format v2
+//!
+//! [`v2`] implements the domain-separated, metadata-binding format shared with
+//! the Python package (`docs/MANIFEST_V2.md` there), with tensor and chunk
+//! inclusion proofs against the model root. The v1 types above are unchanged.
+//!
 //! Part of the [HanFei (韩非) verifiable AI series](https://github.com/GeoffreyWang1117/hanfei-shu).
 
 pub mod hasher;
@@ -33,6 +39,7 @@ pub mod chunking;
 pub mod merkle_tree;
 pub mod comparison;
 pub mod strategies;
+pub mod v2;
 
 pub use hasher::{HashAlgorithm, compute_hash, hash_pair, verify_hash};
 pub use chunking::{chunk_bytes, chunk_bytes_iter, estimate_chunk_count, DEFAULT_CHUNK_SIZE};
